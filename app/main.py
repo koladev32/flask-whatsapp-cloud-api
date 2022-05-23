@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, jsonify, request
-from .whatsapp_client import WhatsAppWrapper
+from app.whatsapp_client import WhatsAppWrapper
 
 app = Flask(__name__)
 
