@@ -47,7 +47,7 @@ def webhook_whatsapp():
 
     client = WhatsAppClient()
 
-    response = client.process_webhook_notification(request.json)
+    client.process_webhook_notification(request.json)
     
     # Do anything with the response
     # Sending a message to a phone number to confirm the webhook is working
