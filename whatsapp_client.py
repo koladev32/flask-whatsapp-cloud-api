@@ -25,29 +25,33 @@ class WhatsAppWrapper:
             "type": "template",
             "template": {"name": template_name, "language": {"code": language_code}},
         }
-        
-        response = requests.post(f"{self.API_URL}/messages", headers=self.headers, json=data)
-        
+
+        response = requests.post(
+            f"{self.API_URL}/messages", headers=self.headers, json=data
+        )
+
         assert response.status_code == 200, "Error sending message"
-        
+
         return response.json()
-    
+
     def process_webhook_notification(self, data):
         """_summary_: Process webhook notification
-            For the moment, this will return the type of notification
+        For the moment, this will return the type of notification
         """
-        
-        response =  []
-        
-        for entry in data['entry']:
-            
-            for change in entry['changes']:
-                response.append({
-                    "type": change['field'],
-                    "from": change['display_phone_number'],
-                    "messages": change['messages'],
-                    "errors": change['errors'],
-                    "contacts": change['contacts'],
-                })
-                
+
+        response = []
+
+        for entry in data["entry"]:
+
+            for change in entry["changes"]:
+                response.append(
+                    {
+                        "type": change["field"],
+                        "from": change["display_phone_number"],
+                        "messages": change["messages"],
+                        "errors": change["errors"],
+                        "contacts": change["contacts"],
+                    }
+                )
+
         return response
