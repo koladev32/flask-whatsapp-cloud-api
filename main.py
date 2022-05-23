@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, jsonify, request
-from .whatsapp_client import WhatsAppWrapper as WhatsAppClient
+from .whatsapp_client import WhatsAppWrapper
 
 app = Flask(__name__)
 
@@ -24,7 +24,7 @@ def send_message():
     if "template_name" not in request.json:
         return jsonify({"error": "Missing template_name"}), 400
 
-    client = WhatsAppClient()
+    client = WhatsAppWrapper()
 
     response = client.send_template_message(
         template_name=request.json["template_name"],
@@ -45,7 +45,7 @@ def send_message():
 def webhook_whatsapp():
     """__summary__: Get message from the webhook"""
 
-    client = WhatsAppClient()
+    client = WhatsAppWrapper()
 
     client.process_webhook_notification(request.json)
     
