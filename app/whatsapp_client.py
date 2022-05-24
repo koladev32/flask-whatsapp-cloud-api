@@ -1,6 +1,8 @@
 import os
 import requests
 
+import json
+
 
 class WhatsAppWrapper:
 
@@ -13,25 +15,24 @@ class WhatsAppWrapper:
             "Authorization": "Bearer {}".format(self.API_TOKEN),
             "Content-Type": "application/json",
         }
-
+        
         self.API_URL = "https://graph.facebook.com/v13.0/" + self.NUMBER_ID
 
     def send_template_message(self, template_name, language_code, phone_number):
 
-        data = {
+        payload = {
             "messaging_product": "whatsapp",
             "to": phone_number,
             "type": "template",
-            "template": {"name": template_name, "language": {"code": language_code}},
+            "template": {"name": template_name, "language": {"code": language_code}}
         }
-
-        response = requests.post(
-            f"{self.API_URL}/messages", headers=self.headers, json=data
-        )
-
+        
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, json=json.dumps(payload))
+        
+        print(response.request.body, response.request.url, response.json(), response.status_code)
         assert response.status_code == 200, "Error sending message"
 
-        return response.json()
+        return response.status_code
 
     def process_webhook_notification(self, data):
         """_summary_: Process webhook notification

@@ -37,8 +37,7 @@ def send_message():
             "data": response,
             "status": "success",
         },
-        200,
-    )
+    ), 200
 
 
 @app.route("/webhook_whatsapp/", methods=["POST"])
