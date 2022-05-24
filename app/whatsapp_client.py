@@ -12,24 +12,27 @@ class WhatsAppWrapper:
 
     def __init__(self):
         self.headers = {
-            "Authorization": "Bearer {}".format(self.API_TOKEN),
+            "Authorization": f"Bearer {self.API_TOKEN}",
             "Content-Type": "application/json",
         }
-        
-        self.API_URL = "https://graph.facebook.com/v13.0/" + self.NUMBER_ID
+        self.API_URL = self.API_URL + self.NUMBER_ID
 
     def send_template_message(self, template_name, language_code, phone_number):
 
-        payload = {
+        payload = json.dumps({
             "messaging_product": "whatsapp",
             "to": phone_number,
             "type": "template",
-            "template": {"name": template_name, "language": {"code": language_code}}
-        }
-        
-        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, json=json.dumps(payload))
-        
-        print(response.request.body, response.request.url, response.json(), response.status_code)
+            "template": {
+                "name": template_name,
+                "language": {
+                    "code": language_code
+                }
+            }
+        })
+
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
         assert response.status_code == 200, "Error sending message"
 
         return response.status_code
