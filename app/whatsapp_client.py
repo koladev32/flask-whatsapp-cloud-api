@@ -44,8 +44,6 @@ class WhatsAppWrapper:
 
         response = []
 
-        print(data)
-
         for entry in data["entry"]:
 
             for change in entry["changes"]:
@@ -53,8 +51,6 @@ class WhatsAppWrapper:
                     {
                         "type": change["field"],
                         "from": change["value"]["metadata"]["display_phone_number"],
-                        "messages": change["value"]["messages"],
-                        "contacts": change["value"]["contacts"],
                     }
                 )
 
