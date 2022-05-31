@@ -5,6 +5,8 @@ from app.whatsapp_client import WhatsAppWrapper
 
 app = Flask(__name__)
 
+VERIFY_TOKEN = os.environ.get('WHATSAPP_HOOK_TOKEN')
+
 
 @app.route("/")
 def hello_world():
@@ -40,13 +42,18 @@ def send_message():
     ), 200
 
 
-@app.route("/webhook_whatsapp/", methods=["POST"])
+@app.route("/webhook/", methods=["POST", "GET"])
 def webhook_whatsapp():
     """__summary__: Get message from the webhook"""
 
+    if request.method == "GET":
+        if request.args.get('hub.verify_token') == VERIFY_TOKEN:
+            return request.args.get('hub.challenge')
+        return "Authentication failed. Invalid Token."
+
     client = WhatsAppWrapper()
 
-    client.process_webhook_notification(request.json)
+    client.process_webhook_notification(request.get_json())
     
     # Do anything with the response
     # Sending a message to a phone number to confirm the webhook is working
