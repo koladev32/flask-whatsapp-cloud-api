@@ -44,6 +44,8 @@ class WhatsAppWrapper:
 
         response = []
 
+        print(data)
+
         for entry in data["entry"]:
 
             for change in entry["changes"]:
